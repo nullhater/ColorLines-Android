@@ -12,6 +12,7 @@ public class ColorLines {
     private int colorsCount = 7; //Кол-во всех цветов
     private int nextBallsCount = 3; //Кол-во генерируемых шаров за раз
     private int collapseCount = 5; //Кол-во шаров, которое нужно собрать в линию
+    private boolean gameOver = false;
 
     public ColorLines(int fieldSize) {
         this.fieldSize = fieldSize;
@@ -28,6 +29,11 @@ public class ColorLines {
         this.colorsCount = colorsCount;
         this.nextBallsCount = nextBallsCount;
         this.collapseCount = collapseCount;
+    }
+
+    public void moveBall(int posX, int posY){
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
+        field = addBalls(field,nextColors);
     }
 
     private int []generateNextColors(int balls, int colors){
@@ -60,5 +66,41 @@ public class ColorLines {
     {
         max -= min;
         return (int) (Math.random() * ++max) + min;
+    }
+
+    public int getFieldSize() {
+        return fieldSize;
+    }
+
+    public int[][] getField() {
+        return field;
+    }
+
+    public int[] getNextColors() {
+        return nextColors;
+    }
+
+    public int[] getSelectedBall() {
+        return selectedBall;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getColorsCount() {
+        return colorsCount;
+    }
+
+    public int getNextBallsCount() {
+        return nextBallsCount;
+    }
+
+    public int getCollapseCount() {
+        return collapseCount;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

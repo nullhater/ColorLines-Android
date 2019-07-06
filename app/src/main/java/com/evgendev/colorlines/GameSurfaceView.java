@@ -12,13 +12,13 @@ import android.view.SurfaceView;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private SurfaceHolder surfaceHolder = null;
-    private int backColor = Color.WHITE; //Цвет всей области рисования
-    private int fieldColor = Color.WHITE; //Цвет поля
-    private int gridColor = Color.BLACK; //Цвет сетки
-    private boolean showGrid = true; //Отображать сетку
-    private int gridStroke = 1; //Толщина линий сетки
-    private int fieldSize = 1; //Кол-во ячеек в строке и столбце
+    protected SurfaceHolder surfaceHolder = null;
+    protected int backColor = Color.WHITE; //Цвет всей области рисования
+    protected int fieldColor = Color.WHITE; //Цвет поля
+    protected int gridColor = Color.BLACK; //Цвет сетки
+    protected boolean showGrid = true; //Отображать сетку
+    protected int gridStroke = 1; //Толщина линий сетки
+    protected int fieldSize = 1; //Кол-во ячеек в строке и столбце
 
     public enum CellType{
         SQUARE,
