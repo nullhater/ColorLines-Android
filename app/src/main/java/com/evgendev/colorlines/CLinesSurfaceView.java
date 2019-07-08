@@ -20,13 +20,16 @@ public class CLinesSurfaceView extends GameSurfaceView {
         drawOrigin(canvas);
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                int color = 0;
-                if (i == selectedBall[0] && j == selectedBall[1]){
-                    color = colors.get(gameField[i][j]).selected;
-                }else {
-                    color = colors.get(gameField[i][j]).normal;
+                if (gameField[i][j]!=0) {
+                    int color = 0;
+                    if (i == selectedBall[0] && j == selectedBall[1]) {
+                        color = colors.get(gameField[i][j] - 1).selected;
+                    } else {
+                        color = colors.get(gameField[i][j] - 1).normal;
+                    }
+                    float []cc = {360,1,1};
+                    setCell(canvas, i, j, CellType.CIRCLE, color, 80);
                 }
-                setCell(canvas,i,j,CellType.CIRCLE,color,80);
             }
         }
         if (showGrid) drawGrid(canvas,fieldSize);
@@ -45,22 +48,25 @@ public class CLinesSurfaceView extends GameSurfaceView {
         float []normal = new float[3];
         float []selected = new float[3];
         for (float x = 0; x < 360; x += interval) {
-            normal[0] = x / 360;
-            normal[1] = 1;
+            normal[0] = x;
+            normal[1] = 0.7f;
             normal[2] = 1;
-            selected[0] = x / 360;
-            selected[1] = 1;
+            selected[0] = x;
+            selected[1] = 0.3f;
             selected[2] = 1;
             colors.add(new BallColor(Color.HSVToColor(normal),Color.HSVToColor(selected)));
         }
     }
 
     private class BallColor {
+
+        public int normal = 0;
+        public int selected = 0;
+
         public BallColor(int normal, int selected) {
             this.normal = normal;
             this.selected = selected;
         }
-        public int normal = 0;
-        public int selected = 0;
+
     }
 }
