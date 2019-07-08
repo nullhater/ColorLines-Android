@@ -22,6 +22,8 @@ public class ColorLines {
                 field[i][j] = 0;
             }
         }
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
+        field = addBalls(field,nextColors);
     }
 
     public ColorLines(int fieldSize, int colorsCount, int nextBallsCount, int collapseCount) {
@@ -31,10 +33,61 @@ public class ColorLines {
         this.collapseCount = collapseCount;
     }
 
+    public ColorLines(ColorLines colorLines){
+        fieldSize = colorLines.fieldSize;
+        field = new int[fieldSize][fieldSize];
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                field[i][j] = colorLines.field[i][j];
+            }
+        }
+        score = colorLines.score;
+        colorsCount = colorLines.colorsCount;
+        nextBallsCount = colorLines.nextBallsCount;
+        collapseCount = colorLines.collapseCount;
+        gameOver = colorLines.gameOver;
+        nextColors = new int[nextBallsCount];
+        for (int i = 0; i < nextBallsCount; i++) {
+            nextColors[i] = colorLines.nextColors[i];
+        }
+        selectedBall = new int[2];
+        selectedBall[0] = colorLines.selectedBall[0];
+        selectedBall[1] = colorLines.selectedBall[1];
+    }
+
     public void moveBall(int posX, int posY){
+        if (posX>=fieldSize || posY>=fieldSize || posX<0 || posY<0) return; //Если выделение снаружи поля
+        if (field[posX][posY]!=0){ //Если игрок выделяет шар
+            selectedBall[0] = posX;
+            selectedBall[1] = posY;
+            return;
+        }else { //Если игрок выделяет пустую клетку
+            if (selectedBall[0]==-1 || selectedBall[1]==-1) return; //Если до этого не было что либо выделено
+            if (field[selectedBall[0]][selectedBall[1]]==0) return;//Если до этого была выделена пустая клетка
+            PathFinder pathFinder = new PathFinder(this,posX,posY);
+            if (pathFinder.quickCheck()){
+                int buf = field[selectedBall[0]][selectedBall[1]];
+                field[selectedBall[0]][selectedBall[1]] = 0;
+                field[posX][posY] = buf;
+                selectedBall[0] = -1;
+                selectedBall[1] = -1;
+            }else {
+                LoopChecker.init();
+                LoopChecker.add(selectedBall[0]+" "+selectedBall[1],0);
+                PathFinder.init();
+                if(pathFinder.check()){
+                    int buf = field[selectedBall[0]][selectedBall[1]];
+                    field[selectedBall[0]][selectedBall[1]] = 0;
+                    field[posX][posY] = buf;
+                    selectedBall[0] = -1;
+                    selectedBall[1] = -1;
+                }else return;
+            }
+        }
         nextColors = generateNextColors(nextBallsCount,colorsCount);
         field = addBalls(field,nextColors);
     }
+
 
     private int []generateNextColors(int balls, int colors){
         int []arr = new int[balls];

@@ -1,15 +1,22 @@
 package com.evgendev.colorlines;
 
+import android.util.Log;
+
 public class PathFinder {
 
     private ColorLines colorLines;
     private int finishX;
     private int finishY;
+    private static int deep = 0;
 
     public PathFinder(ColorLines colorLines, int finishX, int finishY) {
         this.colorLines = new ColorLines(colorLines);
         this.finishX = finishX;
         this.finishY = finishY;
+    }
+
+    public static void init(){
+        deep = 0;
     }
 
     public boolean quickCheck(){
@@ -45,7 +52,40 @@ public class PathFinder {
         return false;
     }
 
-    public boolean move(int vector){ // 0 - вверх, 1 - вправо, 2 - вниз, 3 - влево
+    public boolean check(){
+        deep++;
+        Log.e("GSV",Integer.toString(deep));
+        ColorLines tempCLines = new ColorLines(colorLines);
+        for (int i = 0; i < 4; i++) {
+            if (move(colorLines,i)){
+                if (onPlace(colorLines)){
+                    colorLines = null;
+                    System.gc();
+                    colorLines = new ColorLines(tempCLines);
+                    return true;
+                }else {
+                    String currentStatus = colorLines.getSelectedBall()[0]+" "+colorLines.getSelectedBall()[1];
+                    if (LoopChecker.isLoop(currentStatus,deep)){
+                        colorLines = null;
+                        colorLines = new ColorLines(tempCLines);
+                    }else {
+                        LoopChecker.add(currentStatus,deep);
+                        PathFinder pathFinder = new PathFinder(colorLines,finishX,finishY);
+                        if (pathFinder.check()) return true;
+                        colorLines = null;
+                        colorLines = new ColorLines(tempCLines);
+                    }
+                }
+            }else {
+                colorLines = null;
+                colorLines = new ColorLines(tempCLines);
+            }
+        }
+        deep--;
+        return false;
+    }
+
+    public boolean move(ColorLines colorLines, int vector){ // 0 - вверх, 1 - вправо, 2 - вниз, 3 - влево
         int posX = colorLines.getSelectedBall()[0];
         int posY = colorLines.getSelectedBall()[1];
         switch (vector){
@@ -75,5 +115,13 @@ public class PathFinder {
             colorLines.getField()[posX][posY] = temp;
             return true;
         }
+    }
+
+    public boolean onPlace(ColorLines colorLines){
+        if (finishX == colorLines.getSelectedBall()[0] && finishY == colorLines.getSelectedBall()[1]){
+            Log.e("GSV","okey");
+            return true;
+        }
+        return false;
     }
 }
