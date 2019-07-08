@@ -51,7 +51,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (this.getWidth()<this.getHeight()){
             maxSize = this.getWidth();
         } else maxSize = this.getHeight();
-        if (showGrid) drawGrid(canvas,maxSize);//Рисуем сетку, если нужно
+        if (showGrid) drawGrid(canvas,fieldSize);//Рисуем сетку, если нужно
         surfaceHolder.unlockCanvasAndPost(canvas);
 
     }
@@ -177,7 +177,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     //Рисовать сетку (принимает Canvas, на котором будет рисовать)
-    public void drawGrid(Canvas canvas, float maxSize){
+    public void drawGrid(Canvas canvas, int fieldSize){
         if (canvas == null){
             Log.e("GSV","canvas not ready");
             return;
@@ -185,6 +185,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Paint surfaceBackground = new Paint();
         surfaceBackground.setColor(gridColor);
         surfaceBackground.setStrokeWidth(gridStroke);
+        float maxSize = 0;
         if (this.getWidth()<this.getHeight()){
             maxSize = this.getWidth();
         } else maxSize = this.getHeight();
