@@ -44,4 +44,34 @@ public class PathFinder {
         }
         return false;
     }
+
+    public boolean move(int vector){ // 0 - вверх, 1 - вправо, 2 - вниз, 3 - влево
+        int posX = colorLines.getSelectedBall()[0];
+        int posY = colorLines.getSelectedBall()[1];
+        switch (vector){
+            case 0:
+                posX-=1;
+                break;
+            case 1:
+                posY+=1;
+                break;
+            case 2:
+                posX+=1;
+                break;
+            case 3:
+                posY-=1;
+                break;
+                default:
+                    return false;
+        }
+        if (colorLines.getField()[posX][posY]!=0){
+            return false;
+        }else {
+            int temp = colorLines.getField()[colorLines.getSelectedBall()[0]][colorLines.getSelectedBall()[1]];
+            colorLines.getSelectedBall()[0] = posX;
+            colorLines.getSelectedBall()[1] = posY;
+            colorLines.getField()[posX][posY] = temp;
+            return true;
+        }
+    }
 }
