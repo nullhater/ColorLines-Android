@@ -1,6 +1,7 @@
 package com.evgendev.colorlines;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
@@ -15,7 +16,22 @@ public class CLinesSurfaceView extends GameSurfaceView {
     }
 
     public boolean drawField(int [][]gameField, int []selectedBall){
-        return false;
+        Canvas canvas = surfaceHolder.lockCanvas();
+        drawOrigin(canvas);
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                int color = 0;
+                if (i == selectedBall[0] && j == selectedBall[1]){
+                    color = colors.get(gameField[i][j]).selected;
+                }else {
+                    color = colors.get(gameField[i][j]).normal;
+                }
+                setCell(canvas,i,j,CellType.CIRCLE,color,80);
+            }
+        }
+        if (showGrid) drawGrid(canvas,fieldSize);
+        surfaceHolder.unlockCanvasAndPost(canvas);
+        return true;
     }
 
     public int getColorsCount() {
