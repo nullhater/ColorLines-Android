@@ -50,24 +50,26 @@ public class PathFinder {
         int posY = colorLines.getSelectedBall()[1];
         switch (vector){
             case 0:
-                posX-=1;
+                posY-=1;
                 break;
             case 1:
-                posY+=1;
-                break;
-            case 2:
                 posX+=1;
                 break;
+            case 2:
+                posY+=1;
+                break;
             case 3:
-                posY-=1;
+                posX-=1;
                 break;
                 default:
                     return false;
         }
+        if (posX<0 || posX>=colorLines.getFieldSize() || posY<0 || posY>=colorLines.getFieldSize()) return false;
         if (colorLines.getField()[posX][posY]!=0){
             return false;
         }else {
             int temp = colorLines.getField()[colorLines.getSelectedBall()[0]][colorLines.getSelectedBall()[1]];
+            colorLines.getField()[colorLines.getSelectedBall()[0]][colorLines.getSelectedBall()[1]] = 0;
             colorLines.getSelectedBall()[0] = posX;
             colorLines.getSelectedBall()[1] = posY;
             colorLines.getField()[posX][posY] = temp;
