@@ -3,6 +3,7 @@ package com.evgendev.colorlines;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -37,6 +38,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
             if (coord[0]>=fieldSize || coord[1]>=fieldSize) return false;
             colorLines.moveBall(coord[0],coord[1]);
             cLinesSurfaceView.drawField(colorLines.getField(),colorLines.getSelectedBall());
+            Log.e("GSV","score: "+colorLines.getScore());
         }
         return false;
     }

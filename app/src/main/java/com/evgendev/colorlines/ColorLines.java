@@ -1,5 +1,6 @@
 package com.evgendev.colorlines;
 
+
 import java.util.ArrayList;
 
 public class ColorLines {
@@ -56,6 +57,7 @@ public class ColorLines {
     }
 
     public void moveBall(int posX, int posY){
+        if (gameOver) return;
         if (posX>=fieldSize || posY>=fieldSize || posX<0 || posY<0) return; //Если выделение снаружи поля
         if (field[posX][posY]!=0){ //Если игрок выделяет шар
             selectedBall[0] = posX;
@@ -65,27 +67,162 @@ public class ColorLines {
             if (selectedBall[0]==-1 || selectedBall[1]==-1) return; //Если до этого не было что либо выделено
             if (field[selectedBall[0]][selectedBall[1]]==0) return;//Если до этого была выделена пустая клетка
             PathFinder pathFinder = new PathFinder(this,posX,posY);
-            if (pathFinder.quickCheck()){
-                int buf = field[selectedBall[0]][selectedBall[1]];
-                field[selectedBall[0]][selectedBall[1]] = 0;
-                field[posX][posY] = buf;
-                selectedBall[0] = -1;
-                selectedBall[1] = -1;
-            }else {
+            if (!pathFinder.quickCheck()){//Если быстрый быстрый поиск пути дал результат, то используем полный поиск пути
                 LoopChecker.init();
                 LoopChecker.add(selectedBall[0]+" "+selectedBall[1],0);
                 PathFinder.init();
-                if(pathFinder.check()){
-                    int buf = field[selectedBall[0]][selectedBall[1]];
-                    field[selectedBall[0]][selectedBall[1]] = 0;
-                    field[posX][posY] = buf;
-                    selectedBall[0] = -1;
-                    selectedBall[1] = -1;
-                }else return;
+                if(!pathFinder.check()) return;
+            }
+            int buf = field[selectedBall[0]][selectedBall[1]];
+            field[selectedBall[0]][selectedBall[1]] = 0;
+            field[posX][posY] = buf;
+            selectedBall[0] = -1;
+            selectedBall[1] = -1;
+            int tempScore = checkLines();
+            if (tempScore>0){
+                score+=tempScore;
+                return;
+            }else {
+                nextColors = generateNextColors(nextBallsCount,colorsCount);
+                field = addBalls(field,nextColors);
+                score+=checkLines();
             }
         }
-        nextColors = generateNextColors(nextBallsCount,colorsCount);
-        field = addBalls(field,nextColors);
+        checkGaveOver();
+    }
+
+    public int checkLines(){
+        int score=0;
+        ArrayList<Pair<Integer,Integer>> sequence = new ArrayList<>();
+        for (int i = 0; i < fieldSize; i++) {
+            int lastVal = 0;
+            for (int j = 0; j < fieldSize; j++) {
+                if (j==0){
+                    lastVal = field[i][j];
+                    if (field[i][j]!=0) sequence.add(new Pair<Integer, Integer>(i,j));
+                }else {
+                    if (lastVal==field[i][j]){
+                        if (field[i][j]!=0) sequence.add(new Pair<Integer, Integer>(i,j));
+                    }else {
+                        if (sequence.size()==0){
+                            if (field[i][j]!=0) sequence.add(new Pair<Integer, Integer>(i,j));
+                        }else {
+                            score += deleteBalls(sequence);
+                            sequence.clear();
+                            if (field[i][j]!=0) sequence.add(new Pair<Integer, Integer>(i,j));
+                        }
+
+                    }
+                    lastVal=field[i][j];
+                }
+            }
+            score+= deleteBalls(sequence);
+            sequence.clear();
+        }
+
+        for (int i = 0; i < fieldSize; i++) {
+            int lastVal = 0;
+            for (int j = 0; j < fieldSize; j++) {
+                if (j==0){
+                    lastVal = field[j][i];
+                    if (field[j][i]!=0) sequence.add(new Pair<Integer, Integer>(j,i));
+                }else {
+                    if (lastVal==field[j][i]){
+                        if (field[j][i]!=0) sequence.add(new Pair<Integer, Integer>(j,i));
+                    }else {
+                        if (sequence.size()==0){
+                            if (field[j][i]!=0) sequence.add(new Pair<Integer, Integer>(j,i));
+                        }else {
+                            score += deleteBalls(sequence);
+                            sequence.clear();
+                            if (field[j][i]!=0) sequence.add(new Pair<Integer, Integer>(j,i));
+                        }
+
+                    }
+                    lastVal=field[j][i];
+                }
+            }
+            score+= deleteBalls(sequence);
+            sequence.clear();
+        }
+
+        for (int i = 0; i < fieldSize - collapseCount+1; i++) {
+            for (int j = 0; j < fieldSize - collapseCount+1; j++) {
+                int lastVal = 0;
+                for (int k = 0; k < fieldSize; k++) {
+                    if (i+k>=fieldSize || j+k>=fieldSize) break;
+                    if (k==0){
+                        lastVal = field[i+k][j+k];
+                        if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                    }else {
+                        if (lastVal==field[i+k][j+k]){
+                            if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                        }else {
+                            if (sequence.size()==0){
+                                if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                            }else {
+                                score += deleteBalls(sequence);
+                                sequence.clear();
+                                if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                            }
+
+                        }
+                        lastVal=field[i+k][j+k];
+                    }
+                }
+            }
+            score+= deleteBalls(sequence);
+            sequence.clear();
+        }
+
+        for (int i = 0; i < fieldSize - collapseCount+1; i++) {
+            for (int j = fieldSize-1; j > collapseCount; j--) {
+                int lastVal = 0;
+                for (int k = 0; k < fieldSize; k++) {
+                    if (i+k>=fieldSize || j-k<0) break;
+                    if (k==0){
+                        lastVal = field[i+k][j-k];
+                        if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                    }else {
+                        if (lastVal==field[i+k][j-k]){
+                            if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                        }else {
+                            if (sequence.size()==0){
+                                if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                            }else {
+                                score += deleteBalls(sequence);
+                                sequence.clear();
+                                if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                            }
+
+                        }
+                        lastVal=field[i+k][j-k];
+                    }
+                }
+            }
+            score+= deleteBalls(sequence);
+            sequence.clear();
+        }
+        return score;
+    }
+
+    private void checkGaveOver(){
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                if (field[i][j]==0) return;
+            }
+        }
+        gameOver = true;
+    }
+
+    private int deleteBalls(ArrayList<Pair<Integer,Integer>> position){
+        if (position.size()>=collapseCount){
+            for (int i = 0; i < position.size(); i++) {
+                field[position.get(i).first][position.get(i).second] = 0;
+            }
+            return position.size()*2;
+        }
+        return 0;
     }
 
 
