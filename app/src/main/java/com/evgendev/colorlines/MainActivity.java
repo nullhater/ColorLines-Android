@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickNewGame(View view) {
-        ColorLines colorLines = new ColorLines(9);
+        ColorLines colorLines = new ColorLines();
         Intent intent = new Intent(MainActivity.this, GameActivity.class);
         intent.putExtra("colorlines",colorLines);
         startActivity(intent);

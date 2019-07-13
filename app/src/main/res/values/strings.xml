@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Color Lines</string>
     <string name="textNewGame">new game</string>
+    <string name="textCantMove">The path is blocked</string>
 </resources>

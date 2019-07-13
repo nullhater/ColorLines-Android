@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Color Lines</string>
     <string name="textNewGame">новая игра</string>
+    <string name="textCantMove">Путь перегорожен</string>
 </resources>

@@ -1,12 +1,16 @@
 package com.evgendev.colorlines;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity implements View.OnTouchListener{
 
@@ -45,7 +49,23 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
             float y = event.getY();
             int []coord = cLinesSurfaceView.getCellXY(x,y);
             if (coord[0]>=fieldSize || coord[1]>=fieldSize) return false;
-            colorLines.moveBall(coord[0],coord[1]);
+            switch (colorLines.moveBall(coord[0],coord[1])){
+                case 0:
+                    break;
+                case -1:
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            R.string.textCantMove,
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast.show();
+                    break;
+                    default:
+                        long mills = 100L;
+                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        if (vibrator.hasVibrator()) {
+                            vibrator.vibrate(mills);
+                        }
+            }
             cLinesSurfaceView.drawField(colorLines.getField(),colorLines.getSelectedBall());
             Log.e("GSV","score: "+colorLines.getScore());
         }

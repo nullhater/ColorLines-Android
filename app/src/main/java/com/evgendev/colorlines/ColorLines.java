@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ColorLines implements Serializable {
 
-    private int fieldSize; //Размер игрового поля
+    private int fieldSize = 9; //Размер игрового поля
     private int [][]field; //Игровое поле (0 - пусто, >0 - цвет шара)
     private int []nextColors; //Цвет шаров, которые появятся при следующем ходе
     private int []selectedBall = {-1,-1}; //Выбранные шар
@@ -16,8 +16,7 @@ public class ColorLines implements Serializable {
     private int collapseCount = 5; //Кол-во шаров, которое нужно собрать в линию
     private boolean gameOver = false;
 
-    public ColorLines(int fieldSize) {
-        this.fieldSize = fieldSize;
+    public ColorLines() {
         field = new int[fieldSize][fieldSize];
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
@@ -29,10 +28,18 @@ public class ColorLines implements Serializable {
     }
 
     public ColorLines(int fieldSize, int colorsCount, int nextBallsCount, int collapseCount) {
-        this(fieldSize);
+        this.fieldSize = fieldSize;
+        field = new int[fieldSize][fieldSize];
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                field[i][j] = 0;
+            }
+        }
         this.colorsCount = colorsCount;
         this.nextBallsCount = nextBallsCount;
         this.collapseCount = collapseCount;
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
+        field = addBalls(field,nextColors);
     }
 
     public ColorLines(ColorLines colorLines){
@@ -57,22 +64,22 @@ public class ColorLines implements Serializable {
         selectedBall[1] = colorLines.selectedBall[1];
     }
 
-    public void moveBall(int posX, int posY){
-        if (gameOver) return;
-        if (posX>=fieldSize || posY>=fieldSize || posX<0 || posY<0) return; //Если выделение снаружи поля
+    public int moveBall(int posX, int posY){
+        if (gameOver) return 0;
+        if (posX>=fieldSize || posY>=fieldSize || posX<0 || posY<0) return 0; //Если выделение снаружи поля
         if (field[posX][posY]!=0){ //Если игрок выделяет шар
             selectedBall[0] = posX;
             selectedBall[1] = posY;
-            return;
+            return 0;
         }else { //Если игрок выделяет пустую клетку
-            if (selectedBall[0]==-1 || selectedBall[1]==-1) return; //Если до этого не было что либо выделено
-            if (field[selectedBall[0]][selectedBall[1]]==0) return;//Если до этого была выделена пустая клетка
+            if (selectedBall[0]==-1 || selectedBall[1]==-1) return 0; //Если до этого не было что либо выделено
+            if (field[selectedBall[0]][selectedBall[1]]==0) return 0;//Если до этого была выделена пустая клетка
             PathFinder pathFinder = new PathFinder(this,posX,posY);
             if (!pathFinder.quickCheck()){//Если быстрый быстрый поиск пути дал результат, то используем полный поиск пути
                 LoopChecker.init();
                 LoopChecker.add(selectedBall[0]+" "+selectedBall[1],0);
                 PathFinder.init();
-                if(!pathFinder.check()) return;
+                if(!pathFinder.check()) return -1;
             }
             int buf = field[selectedBall[0]][selectedBall[1]];
             field[selectedBall[0]][selectedBall[1]] = 0;
@@ -82,17 +89,30 @@ public class ColorLines implements Serializable {
             int tempScore = checkLines();
             if (tempScore>0){
                 score+=tempScore;
-                return;
+                if (fieldIsEmpty()){
+                    field = addBalls(field,nextColors);
+                    score+=checkLines();
+                }
             }else {
                 nextColors = generateNextColors(nextBallsCount,colorsCount);
                 field = addBalls(field,nextColors);
                 score+=checkLines();
             }
+            checkGaveOver();
+            return tempScore;
         }
-        checkGaveOver();
     }
 
-    public int checkLines(){
+    private boolean fieldIsEmpty(){
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                if (field[i][j]!=0) return false;
+            }
+        }
+        return true;
+    }
+
+    private int checkLines(){
         int score=0;
         ArrayList<Pair<Integer,Integer>> sequence = new ArrayList<>();
         for (int i = 0; i < fieldSize; i++) {
