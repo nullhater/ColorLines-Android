@@ -20,12 +20,21 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_game);
         cLinesSurfaceView = findViewById(R.id.gameView);
         cLinesSurfaceView.setOnTouchListener(this);
+        colorLines = (ColorLines) getIntent().getSerializableExtra("colorlines");
+        fieldSize = colorLines.getFieldSize();
         cLinesSurfaceView.setFieldSize(fieldSize);
-        cLinesSurfaceView.setColorsCount(7);
+        cLinesSurfaceView.setColorsCount(colorLines.getColorsCount());
         cLinesSurfaceView.setFieldColor(Color.argb(255,200,200,200));
         cLinesSurfaceView.setGridStroke(5);
-        cLinesSurfaceView.drawOrigin();
-        colorLines = new ColorLines(9);
+        new Thread(){
+            @Override
+            public void run() {
+                while (!cLinesSurfaceView.isCanvasReady()){
+                }
+                cLinesSurfaceView.drawField(colorLines.getField(),colorLines.getSelectedBall());
+
+            }
+        }.start();
     }
 
 

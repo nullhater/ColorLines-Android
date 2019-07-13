@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
 
@@ -11,11 +12,14 @@ public class CLinesSurfaceView extends GameSurfaceView {
 
     private int colorsCount = 1;
     private ArrayList<BallColor> colors;
+    private volatile boolean canvasReady = false;
+    private int [][]lastField = null;
+    private int[]lastSelect = null;
     public CLinesSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public boolean drawField(int [][]gameField, int []selectedBall){
+    public void drawField(int [][]gameField, int []selectedBall){
         Canvas canvas = surfaceHolder.lockCanvas();
         drawOrigin(canvas);
         for (int i = 0; i < fieldSize; i++) {
@@ -32,13 +36,25 @@ public class CLinesSurfaceView extends GameSurfaceView {
                 }
             }
         }
+        lastField = new int[gameField.length][gameField.length];
+        for (int i = 0; i < gameField.length; i++) {
+            for (int j = 0; j < gameField.length; j++) {
+                lastField[i][j] = gameField[i][j];
+            }
+        }
+        lastSelect = new int[selectedBall.length];
+        System.arraycopy(selectedBall,0,lastSelect,0,lastSelect.length);
         if (showGrid) drawGrid(canvas,fieldSize);
         surfaceHolder.unlockCanvasAndPost(canvas);
-        return true;
+        return;
     }
 
     public int getColorsCount() {
         return colorsCount;
+    }
+
+    public boolean isCanvasReady() {
+        return canvasReady;
     }
 
     public void setColorsCount(int colorsCount) {
@@ -68,5 +84,17 @@ public class CLinesSurfaceView extends GameSurfaceView {
             this.selected = selected;
         }
 
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        canvasReady = true;
+        if (lastField==null || lastSelect == null) return;
+        drawField(lastField,lastSelect);
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        canvasReady = false;
     }
 }

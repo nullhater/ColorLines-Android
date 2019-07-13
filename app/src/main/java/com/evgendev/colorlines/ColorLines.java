@@ -1,9 +1,10 @@
 package com.evgendev.colorlines;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ColorLines {
+public class ColorLines implements Serializable {
 
     private int fieldSize; //Размер игрового поля
     private int [][]field; //Игровое поле (0 - пусто, >0 - цвет шара)
