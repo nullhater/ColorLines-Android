@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">Color Lines</string>
-    <string name="textNewGame">new game</string>
+    <string name="textNewGame">classic game</string>
+    <string name="textCustomGame">custom game</string>
     <string name="textCantMove">The path is blocked</string>
+    <string name="textNext">next</string>
+    <string name="textSetFieldSize">Set field size</string>
+    <string name="textCollapseCount">Set collapse count</string>
+    <string name="textColorsCount">Set colors count</string>
+    <string name="textNextBallsCount">Set count of generation new balls</string>
+    <string name="textExit">Exit</string>
+    <string name="textBack">Back</string>
+    <string name="textRestart">restart</string>
+    <string name="textAbortCreate">Abort the creation of the game?</string>
+    <string name="textContinue">Continue</string>
+    <string name="textAbort">Abort</string>
+    <string name="textYes">Yes</string>
+    <string name="textNo">No</string>
+    <string name="textCancel">Cancel</string>
+    <string name="textSaveAndExit">Save and exit the game?</string>
+    <string name="textAbortAndExit">Abort and exit</string>
 </resources>

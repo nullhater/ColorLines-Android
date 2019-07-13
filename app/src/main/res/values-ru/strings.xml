@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">Color Lines</string>
-    <string name="textNewGame">новая игра</string>
+    <string name="textNewGame">классическая игра</string>
+    <string name="textCustomGame">настраиваемая игра</string>
     <string name="textCantMove">Путь перегорожен</string>
+    <string name="textNext">далее</string>
+    <string name="textSetFieldSize">Задайте размер поля</string>
+    <string name="textCollapseCount">Задайте длину исчезающей линии</string>
+    <string name="textColorsCount">Задайте количество цветов шаров</string>
+    <string name="textNextBallsCount">Задайте количество генерируемых шаров</string>
+    <string name="textExit">выход</string>
+    <string name="textBack">назад</string>
+    <string name="textRestart">Рестарт</string>
+    <string name="textAbortCreate">Прервать создание игры?</string>
+    <string name="textContinue">Продолжить</string>
+    <string name="textAbort">Прервать</string>
+    <string name="textYes">Да</string>
+    <string name="textNo">Нет</string>
+    <string name="textCancel">Отмена</string>
+    <string name="textSaveAndExit">Сохранить и выйти из игры?</string>
+    <string name="textAbortAndExit">Прервать и выйти</string>
 </resources>

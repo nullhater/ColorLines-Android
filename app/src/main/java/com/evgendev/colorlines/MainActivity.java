@@ -19,4 +19,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("colorlines",colorLines);
         startActivity(intent);
     }
+
+    public void onClickCustomGame(View view){
+        Intent intent = new Intent(MainActivity.this,CustomSetting.class);
+        startActivity(intent);
+    }
 }

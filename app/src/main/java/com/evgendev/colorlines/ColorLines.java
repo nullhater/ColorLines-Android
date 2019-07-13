@@ -25,6 +25,7 @@ public class ColorLines implements Serializable {
         }
         nextColors = generateNextColors(nextBallsCount,colorsCount);
         field = addBalls(field,nextColors);
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
     }
 
     public ColorLines(int fieldSize, int colorsCount, int nextBallsCount, int collapseCount) {
@@ -40,6 +41,7 @@ public class ColorLines implements Serializable {
         this.collapseCount = collapseCount;
         nextColors = generateNextColors(nextBallsCount,colorsCount);
         field = addBalls(field,nextColors);
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
     }
 
     public ColorLines(ColorLines colorLines){
@@ -65,7 +67,7 @@ public class ColorLines implements Serializable {
     }
 
     public int moveBall(int posX, int posY){
-        if (gameOver) return 0;
+        if (gameOver) return 0; //Если игры закончена, то выходим
         if (posX>=fieldSize || posY>=fieldSize || posX<0 || posY<0) return 0; //Если выделение снаружи поля
         if (field[posX][posY]!=0){ //Если игрок выделяет шар
             selectedBall[0] = posX;
@@ -91,11 +93,12 @@ public class ColorLines implements Serializable {
                 score+=tempScore;
                 if (fieldIsEmpty()){
                     field = addBalls(field,nextColors);
+                    nextColors = generateNextColors(nextBallsCount,colorsCount);
                     score+=checkLines();
                 }
             }else {
-                nextColors = generateNextColors(nextBallsCount,colorsCount);
                 field = addBalls(field,nextColors);
+                nextColors = generateNextColors(nextBallsCount,colorsCount);
                 score+=checkLines();
             }
             checkGaveOver();
