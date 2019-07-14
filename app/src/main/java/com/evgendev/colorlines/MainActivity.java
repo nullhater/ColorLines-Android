@@ -10,10 +10,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.IOException;
-
-import static com.evgendev.colorlines.AppUtils.APP_PREFERENCES;
-import static com.evgendev.colorlines.AppUtils.APP_PREFERENCES_SAVEGAME;
 
 public class MainActivity extends AppCompatActivity {
 
