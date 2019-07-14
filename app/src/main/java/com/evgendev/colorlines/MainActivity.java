@@ -2,7 +2,6 @@ package com.evgendev.colorlines;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import static com.evgendev.colorlines.AppUtils.APP_PREFERENCES_SAVEGAME;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ColorLines saveCLines;
     private Button continueButton;
     private TextView textVersion;
     @Override
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Object obj = AppUtils.FileToObj(AppUtils.FILESAVE,context);
         if (obj!=null){
             if (obj instanceof ColorLines){
-                saveCLines = (ColorLines) obj;
                 continueButton.setEnabled(true);
             }else continueButton.setEnabled(false);
         }else continueButton.setEnabled(false);

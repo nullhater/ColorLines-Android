@@ -1,3 +1,6 @@
+/*
+        Отрисовка цветов следующих шаров
+ */
 package com.evgendev.colorlines;
 
 import android.content.Context;

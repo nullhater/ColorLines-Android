@@ -1,7 +1,6 @@
 package com.evgendev.colorlines;
 
 
-import android.util.Log;
 import android.util.Pair;
 
 import java.io.Serializable;
@@ -47,7 +46,7 @@ public class ColorLines implements Serializable {
         nextColors = generateNextColors(nextBallsCount,colorsCount);
     }
 
-    public ColorLines(ColorLines colorLines){
+    public ColorLines(ColorLines colorLines){ //Конструктор копирования
         fieldSize = colorLines.fieldSize;
         field = new int[fieldSize][fieldSize];
         for (int i = 0; i < fieldSize; i++) {
@@ -69,7 +68,7 @@ public class ColorLines implements Serializable {
         selectedBall[1] = colorLines.selectedBall[1];
     }
 
-    public int moveBall(int posX, int posY){
+    public int moveBall(int posX, int posY){ //Перемещение шара по команде пользователя
         if (gameOver) return 0; //Если игры закончена, то выходим
         if (posX>=fieldSize || posY>=fieldSize || posX<0 || posY<0) return 0; //Если выделение снаружи поля
         if (field[posX][posY]!=0){ //Если игрок выделяет шар
@@ -110,7 +109,6 @@ public class ColorLines implements Serializable {
                     field = addBalls(field,nextColors);
                     nextColors = generateNextColors(nextBallsCount,colorsCount);
                     tscore = checkLines();
-                    if (tscore>0) Log.e("POLE","Успех");
                     score+=tscore;
                 }while (tscore>0);
             }
@@ -119,7 +117,7 @@ public class ColorLines implements Serializable {
         }
     }
 
-    private boolean fieldIsEmpty(){
+    private boolean fieldIsEmpty(){ //Проверка на пустое поле
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
                 if (field[i][j]!=0) return false;
@@ -128,7 +126,7 @@ public class ColorLines implements Serializable {
         return true;
     }
 
-    private int checkLines(){
+    private int checkLines(){ //Проверка собранных линий и их удаление с начислением очков
         int score=0;
         ArrayList<Pair<Integer,Integer>> sequence = new ArrayList<>();
         for (int i = 0; i < fieldSize; i++) {
@@ -256,7 +254,7 @@ public class ColorLines implements Serializable {
         if (position.size()>=collapseCount){
             for (int i = 0; i < position.size() - 1; i++) {
                 for (int j = i+1; j < position.size(); j++) {
-                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second]) return 0;
+                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second]) return 0; //Если в линии разные шары, то не удалять
                 }
             }
             for (int i = 0; i < position.size(); i++) {
@@ -268,7 +266,7 @@ public class ColorLines implements Serializable {
     }
 
 
-    private int []generateNextColors(int balls, int colors){
+    private int []generateNextColors(int balls, int colors){ //Генерировать цваета следующих шаров
         int []arr = new int[balls];
         for (int i = 0; i < balls; i++) {
             arr[i] = rnd(1,colors);
@@ -276,7 +274,7 @@ public class ColorLines implements Serializable {
         return arr;
     }
 
-    private int [][]addBalls(int [][]oldField, int []newBalls){
+    private int [][]addBalls(int [][]oldField, int []newBalls){ //Добавление на поле новых шаров
         ArrayList<Integer> freeIndex = new ArrayList<>();
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {

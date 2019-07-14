@@ -1,3 +1,7 @@
+/*
+    Кастомная настройка игры
+ */
+
 package com.evgendev.colorlines;
 
 import android.content.Context;

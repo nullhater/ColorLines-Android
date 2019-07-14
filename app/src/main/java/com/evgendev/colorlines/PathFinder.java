@@ -1,6 +1,8 @@
 package com.evgendev.colorlines;
 
-import android.util.Log;
+/*
+  Данный класс рекурсивно проверяет путь до заданной клетки
+ */
 
 public class PathFinder {
 

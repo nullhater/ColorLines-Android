@@ -3,14 +3,11 @@ package com.evgendev.colorlines;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -19,9 +16,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-
-import static com.evgendev.colorlines.AppUtils.APP_PREFERENCES;
 
 public class GameActivity extends AppCompatActivity implements View.OnTouchListener{
 
@@ -56,7 +50,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         new Thread(){
             @Override
             public void run() {
-                while (!(cLinesSurfaceView.isCanvasReady() && nextBallsSurfaceView.isCanvasReady())){
+                while (!(cLinesSurfaceView.isCanvasReady() && nextBallsSurfaceView.isCanvasReady())){ //Ждем пока canvas будет готов
                 }
                 cLinesSurfaceView.drawField(colorLines.getField(),colorLines.getSelectedBall());
                 nextBallsSurfaceView.drawBalls(colorLines.getNextColors());
@@ -68,7 +62,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event) { //Касание к полю
         if (!canvasReady) return false;
         if(v instanceof SurfaceView){
             float x = event.getX();

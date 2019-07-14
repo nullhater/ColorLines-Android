@@ -1,3 +1,6 @@
+/*
+       Данный класс отрисовывает игровое поле и имеет функции для рисования объектов поля
+ */
 package com.evgendev.colorlines;
 
 import android.content.Context;

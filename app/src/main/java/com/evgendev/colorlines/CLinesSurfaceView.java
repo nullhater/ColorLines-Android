@@ -1,3 +1,6 @@
+/*
+    Отрисовка игрового поля для игры ColorLines
+ */
 package com.evgendev.colorlines;
 
 import android.content.Context;
@@ -11,10 +14,10 @@ import java.util.ArrayList;
 public class CLinesSurfaceView extends GameSurfaceView {
 
     private int colorsCount = 1;
-    private ArrayList<BallColor> colors;
-    private volatile boolean canvasReady = false;
-    private int [][]lastField = null;
-    private int[]lastSelect = null;
+    private ArrayList<BallColor> colors;//Заранее подготовленные цвета для шариков
+    private volatile boolean canvasReady = false; //Статут готовности canvas
+    private int [][]lastField = null; //Последнее прорисованное поле
+    private int[]lastSelect = null; //Последний выбранный шар
     public CLinesSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -57,6 +60,7 @@ public class CLinesSurfaceView extends GameSurfaceView {
         return canvasReady;
     }
 
+    //Подготовка (генерация) цветов для шаров
     public void setColorsCount(int colorsCount) {
         this.colorsCount = colorsCount;
         colors = new ArrayList<>();
