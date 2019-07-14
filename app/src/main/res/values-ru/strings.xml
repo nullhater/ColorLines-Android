@@ -19,4 +19,8 @@
     <string name="textCancel">Отмена</string>
     <string name="textSaveAndExit">Сохранить и выйти из игры?</string>
     <string name="textAbortAndExit">Прервать и выйти</string>
+    <string name="textSWW">что-то пошло не так..</string>
+    <string name="textGaveOver">Конец игры</string>
+    <string name="textPoints">Вы набрали очков:</string>
+    <string name="textVersion">Версия</string>
 </resources>

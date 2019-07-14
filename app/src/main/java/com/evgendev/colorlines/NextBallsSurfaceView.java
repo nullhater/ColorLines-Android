@@ -33,6 +33,7 @@ public class NextBallsSurfaceView extends SurfaceView implements SurfaceHolder.C
     }
 
     public void drawBalls(int []balls){
+        this.setBackgroundColor(backColor);
         float posY = getHeight()/2;
         lastBalls = new int[balls.length];
         ArrayList<Float> posX = makePosY(balls.length,getWidth());
@@ -61,6 +62,14 @@ public class NextBallsSurfaceView extends SurfaceView implements SurfaceHolder.C
             list.add(((size/(float)count)*(float)i)+((size/(float)count))/2);
         }
         return list;
+    }
+
+    public int getBackColor() {
+        return backColor;
+    }
+
+    public void setBackColor(int backColor) {
+        this.backColor = backColor;
     }
 
     @Override

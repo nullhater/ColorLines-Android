@@ -19,4 +19,8 @@
     <string name="textCancel">Cancel</string>
     <string name="textSaveAndExit">Save and exit the game?</string>
     <string name="textAbortAndExit">Abort and exit</string>
+    <string name="textSWW">something went wrong..</string>
+    <string name="textGaveOver">Game over</string>
+    <string name="textPoints">You collect points:</string>
+    <string name="textVersion">Version</string>
 </resources>

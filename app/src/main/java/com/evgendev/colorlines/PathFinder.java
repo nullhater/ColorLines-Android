@@ -54,7 +54,6 @@ public class PathFinder {
 
     public boolean check(){
         deep++;
-        Log.e("GSV",Integer.toString(deep));
         ColorLines tempCLines = new ColorLines(colorLines);
         for (int i = 0; i < 4; i++) {
             if (move(colorLines,i)){
@@ -119,7 +118,6 @@ public class PathFinder {
 
     public boolean onPlace(ColorLines colorLines){
         if (finishX == colorLines.getSelectedBall()[0] && finishY == colorLines.getSelectedBall()[1]){
-            Log.e("GSV","okey");
             return true;
         }
         return false;

@@ -23,4 +23,13 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.evgendev.colorlines", appContext.getPackageName());
     }
+
+    @Test
+    public void write(){
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        Integer a = 4;
+        AppUtils.objToFile("test",a,appContext);
+        Integer b = (Integer) AppUtils.FileToObj("test",appContext);
+        assertEquals(new Integer(4),b);
+    }
 }

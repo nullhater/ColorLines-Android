@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backColor"
+    android:screenOrientation="portrait"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="203dp"
+        android:id="@+id/buttonClassicG"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -16,23 +18,62 @@
         android:layout_marginBottom="8dp"
         android:onClick="onClickNewGame"
         android:text="@string/textNewGame"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        android:background="@drawable/round_button_selector"
+        android:textColor="@color/colorForText"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCustomG"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.809" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonCustomG"
         android:layout_width="200dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="276dp"
+        android:layout_marginBottom="8dp"
         android:onClick="onClickCustomGame"
         android:text="@string/textCustomGame"
+        android:background="@drawable/round_button_selector"
+        android:textColor="@color/colorForText"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonContinueG"
+        android:layout_width="200dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:enabled="false"
+        android:onClick="onClickContinue"
+        android:text="@string/textContinue"
+        android:background="@drawable/round_button_selector"
+        android:textColor="@color/colorForText"
+        app:layout_constraintBottom_toTopOf="@+id/textViewVersion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/textViewVersion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent" />
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
 </android.support.constraint.ConstraintLayout>

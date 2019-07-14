@@ -1,8 +1,13 @@
 package com.evgendev.colorlines;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +18,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+
+import static com.evgendev.colorlines.AppUtils.APP_PREFERENCES;
 
 public class GameActivity extends AppCompatActivity implements View.OnTouchListener{
 
@@ -26,18 +35,21 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_game);
         getSupportActionBar().hide();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         cLinesSurfaceView = findViewById(R.id.gameView);
         nextBallsSurfaceView = findViewById(R.id.nextBallsSurfaceView);
+        nextBallsSurfaceView.setBackColor(getResources().getColor(R.color.backColor));
         textViewScore = findViewById(R.id.textViewScore);
         cLinesSurfaceView.setOnTouchListener(this);
         colorLines = (ColorLines) getIntent().getSerializableExtra("colorlines");
         cLinesRestore = new ColorLines(colorLines);
         cLinesSurfaceView.setFieldSize(colorLines.getFieldSize());
         cLinesSurfaceView.setColorsCount(colorLines.getColorsCount());
-        cLinesSurfaceView.setFieldColor(Color.argb(255,200,200,200));
+        cLinesSurfaceView.setBackColor(getResources().getColor(R.color.backColor));
+        cLinesSurfaceView.setFieldColor(getResources().getColor(R.color.backColor));
         cLinesSurfaceView.setGridStroke(5);
         nextBallsSurfaceView.setColorsCount(colorLines.getColorsCount());
         textViewScore.setText(Integer.toString(colorLines.getScore()));
@@ -84,7 +96,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                         nextBallsSurfaceView.drawBalls(colorLines.getNextColors());
             }
             cLinesSurfaceView.drawField(colorLines.getField(),colorLines.getSelectedBall());
-            Log.e("GSV","score: "+colorLines.getScore());
+            if (colorLines.isGameOver()) showWinDialog();
         }
         return false;
     }
@@ -95,13 +107,66 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void restartGame(){
         if (!canvasReady) return;
-        colorLines = new ColorLines(cLinesRestore);
+        colorLines = new ColorLines(cLinesRestore.getFieldSize(),cLinesRestore.getColorsCount(),cLinesRestore.getNextBallsCount(),cLinesRestore.getCollapseCount());
         textViewScore.setText(Integer.toString(colorLines.getScore()));
         cLinesSurfaceView.drawField(colorLines.getField(),colorLines.getSelectedBall());
         nextBallsSurfaceView.drawBalls(colorLines.getNextColors());
     }
 
     public void onClickCloseGame(View view) {
+        showSaveDialog();
+    }
 
+    @Override
+    public void onBackPressed() {
+        showSaveDialog();
+    }
+
+    private void showSaveDialog(){
+        final Context context = GameActivity.this;
+        AlertDialog.Builder ad;
+        ad = new AlertDialog.Builder(context);
+        ad.setTitle(R.string.textExit);
+        ad.setMessage(R.string.textSaveAndExit);
+        ad.setPositiveButton(R.string.textYes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AppUtils.objToFile(AppUtils.FILESAVE,colorLines,context);
+                startActivity(new Intent(GameActivity.this, MainActivity.class));
+            }
+        });
+        ad.setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        ad.setCancelable(false);
+        ad.show();
+    }
+
+    private void showWinDialog(){
+        final Context context = GameActivity.this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+        String out = getResources().getString(R.string.textPoints);
+        builder.setTitle(R.string.textGaveOver)
+                .setMessage(out+" "+Integer.toString(colorLines.getScore()))
+                .setCancelable(false)
+                .setNegativeButton(R.string.textExit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AppUtils.objToFile(AppUtils.FILESAVE,new Object(),context);
+                        startActivity(new Intent(GameActivity.this, MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    protected void onStop() {
+        final Context context = GameActivity.this;
+        if (!colorLines.isGameOver()) AppUtils.objToFile(AppUtils.FILESAVE,colorLines,context);
+        super.onStop();
     }
 }
