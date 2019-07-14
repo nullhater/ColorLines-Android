@@ -92,21 +92,7 @@ public class ColorLines implements Serializable {
             field[posX][posY] = buf;
             selectedBall[0] = -1;
             selectedBall[1] = -1;
-            int count = 0;
-            for (int i = 0; i < fieldSize; i++) {
-                for (int j = 0; j < fieldSize; j++) {
-                    if (field[i][j]!=0) count++;
-                }
-            }
-            Log.e("POLE","field before "+count);
             int tempScore = checkLines();
-            count = 0;
-            for (int i = 0; i < fieldSize; i++) {
-                for (int j = 0; j < fieldSize; j++) {
-                    if (field[i][j]!=0) count++;
-                }
-            }
-            Log.e("POLE","field after "+count);
             if (tempScore>0){
                 score+=tempScore;
                 if (fieldIsEmpty()){
@@ -115,24 +101,20 @@ public class ColorLines implements Serializable {
                         field = addBalls(field,nextColors);
                         nextColors = generateNextColors(nextBallsCount,colorsCount);
                         tscore = checkLines();
-                        if (tscore>0) Log.e("POLE","Успех");
                         score+=tscore;
                     }while (tscore>0);
                 }
             }else {
-                field = addBalls(field,nextColors);
-                nextColors = generateNextColors(nextBallsCount,colorsCount);
-                score+=checkLines();
+                int tscore=0;
+                do{
+                    field = addBalls(field,nextColors);
+                    nextColors = generateNextColors(nextBallsCount,colorsCount);
+                    tscore = checkLines();
+                    if (tscore>0) Log.e("POLE","Успех");
+                    score+=tscore;
+                }while (tscore>0);
             }
-            count = 0;
-            for (int i = 0; i < fieldSize; i++) {
-                for (int j = 0; j < fieldSize; j++) {
-                    if (field[i][j]!=0) count++;
-                }
-            }
-            Log.e("POLE","field is "+count);
             checkGaveOver();
-            Log.e("POLE","score:  "+score);
             if (score>lastScore) return 1; else return 0;
         }
     }
@@ -272,8 +254,12 @@ public class ColorLines implements Serializable {
 
     private int deleteBalls(ArrayList<Pair<Integer,Integer>> position){
         if (position.size()>=collapseCount){
+            for (int i = 0; i < position.size() - 1; i++) {
+                for (int j = i+1; j < position.size(); j++) {
+                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second]) return 0;
+                }
+            }
             for (int i = 0; i < position.size(); i++) {
-                Log.e("POLE","VALUE: "+field[position.get(i).first][position.get(i).second]);
                 field[position.get(i).first][position.get(i).second] = 0;
             }
             return position.size()*2;
