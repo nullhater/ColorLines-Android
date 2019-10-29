@@ -77,7 +77,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                     Toast toast = Toast.makeText(getApplicationContext(),
                             R.string.textCantMove,
                             Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast.setGravity(Gravity.BOTTOM, 0, 200);
                     toast.show();
                     break;
                     default:
