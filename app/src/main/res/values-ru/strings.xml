@@ -8,7 +8,7 @@
     <string name="textCollapseCount">Задайте длину исчезающей линии</string>
     <string name="textColorsCount">Задайте количество цветов шаров</string>
     <string name="textNextBallsCount">Задайте количество генерируемых шаров</string>
-    <string name="textExit">выход</string>
+    <string name="textExit">Выход</string>
     <string name="textBack">назад</string>
     <string name="textRestart">Рестарт</string>
     <string name="textAbortCreate">Прервать создание игры?</string>
