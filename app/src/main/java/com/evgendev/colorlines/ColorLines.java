@@ -30,6 +30,19 @@ public class ColorLines implements Serializable {
         nextColors = generateNextColors(nextBallsCount,colorsCount);
     }
 
+    public ColorLines(int fieldSize) {
+        this.fieldSize = fieldSize;
+        field = new int[fieldSize][fieldSize];
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                field[i][j] = 0;
+            }
+        }
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
+        field = addBalls(field,nextColors);
+        nextColors = generateNextColors(nextBallsCount,colorsCount);
+    }
+
     public ColorLines(int fieldSize, int colorsCount, int nextBallsCount, int collapseCount) {
         this.fieldSize = fieldSize;
         field = new int[fieldSize][fieldSize];
@@ -94,16 +107,14 @@ public class ColorLines implements Serializable {
             int tempScore = checkLines();
             if (tempScore>0){
                 score+=tempScore;
-                if (fieldIsEmpty()){
-                    int tscore=0;
-                    do{
-                        field = addBalls(field,nextColors);
-                        nextColors = generateNextColors(nextBallsCount,colorsCount);
-                        tscore = checkLines();
-                        score+=tscore;
-                    }while (tscore>0);
-                }
             }else {
+                int tscore=0;
+                field = addBalls(field,nextColors);
+                nextColors = generateNextColors(nextBallsCount,colorsCount);
+                tscore = checkLines();
+                score+=tscore;
+            }
+            if (fieldIsEmpty()){
                 int tscore=0;
                 do{
                     field = addBalls(field,nextColors);
@@ -126,7 +137,7 @@ public class ColorLines implements Serializable {
         return true;
     }
 
-    private int checkLines(){ //Проверка собранных линий и их удаление с начислением очков
+    public int checkLines(){ //Проверка собранных линий и их удаление с начислением очков
         int score=0;
         ArrayList<Pair<Integer,Integer>> sequence = new ArrayList<>();
         for (int i = 0; i < fieldSize; i++) {
@@ -181,7 +192,7 @@ public class ColorLines implements Serializable {
             sequence.clear();
         }
 
-        for (int i = 0; i < fieldSize - collapseCount+1; i++) {
+        for (int i = 0; i <= fieldSize - collapseCount; i++) {
             for (int j = 0; j < fieldSize - collapseCount+1; j++) {
                 int lastVal = 0;
                 for (int k = 0; k < fieldSize; k++) {
@@ -191,14 +202,17 @@ public class ColorLines implements Serializable {
                         if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
                     }else {
                         if (lastVal==field[i+k][j+k]){
-                            if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                            if (field[i+k][j+k]!=0)
+                                sequence.add(new Pair<Integer, Integer>(i+k,j+k));
                         }else {
                             if (sequence.size()==0){
-                                if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                                if (field[i+k][j+k]!=0)
+                                    sequence.add(new Pair<Integer, Integer>(i+k,j+k));
                             }else {
                                 score += deleteBalls(sequence);
                                 sequence.clear();
-                                if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                                if (field[i+k][j+k]!=0)
+                                    sequence.add(new Pair<Integer, Integer>(i+k,j+k));
                             }
 
                         }
@@ -210,24 +224,28 @@ public class ColorLines implements Serializable {
             sequence.clear();
         }
 
-        for (int i = 0; i < fieldSize - collapseCount+1; i++) {
-            for (int j = fieldSize-1; j > collapseCount; j--) {
+        for (int i = 0; i <= fieldSize - collapseCount; i++) {
+            for (int j = fieldSize-1; j >= collapseCount-1; j--) {
                 int lastVal = 0;
                 for (int k = 0; k < fieldSize; k++) {
                     if (i+k>=fieldSize || j-k<0) break;
                     if (k==0){
                         lastVal = field[i+k][j-k];
-                        if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                        if (field[i+k][j-k]!=0)
+                            sequence.add(new Pair<Integer, Integer>(i+k,j-k));
                     }else {
                         if (lastVal==field[i+k][j-k]){
-                            if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                            if (field[i+k][j-k]!=0)
+                                sequence.add(new Pair<Integer, Integer>(i+k,j-k));
                         }else {
                             if (sequence.size()==0){
-                                if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                                if (field[i+k][j-k]!=0)
+                                    sequence.add(new Pair<Integer, Integer>(i+k,j-k));
                             }else {
                                 score += deleteBalls(sequence);
                                 sequence.clear();
-                                if (field[i+k][j-k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j-k));
+                                if (field[i+k][j-k]!=0)
+                                    sequence.add(new Pair<Integer, Integer>(i+k,j-k));
                             }
 
                         }
