@@ -5,8 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Vibrator;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -15,6 +15,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 
 public class GameActivity extends AppCompatActivity implements View.OnTouchListener{
@@ -25,6 +31,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
     private TextView textViewScore;
     private ColorLines colorLines;
     private ColorLines cLinesRestore;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,16 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         getSupportActionBar().hide();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         cLinesSurfaceView = findViewById(R.id.gameView);
+        adView = findViewById(R.id.adViewBanner);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                AdRequest adRequest = new AdRequest.Builder()
+                        .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) //TODO УДАЛИТЬ ПЕРЕД ПУБЛИКАЦИЕЙ
+                        .build();
+                adView.loadAd(adRequest);
+            }
+        });
         nextBallsSurfaceView = findViewById(R.id.nextBallsSurfaceView);
         nextBallsSurfaceView.setBackColor(getResources().getColor(R.color.backColor));
         textViewScore = findViewById(R.id.textViewScore);
