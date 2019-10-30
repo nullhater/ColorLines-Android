@@ -57,7 +57,7 @@ public class CustomSetting extends AppCompatActivity implements SeekBar.OnSeekBa
                 collapseCount = changeRange(seekBar.getProgress(),0,100,downLimit,upLimit);
                 textView.setText(R.string.textNextBallsCount);
                 downLimit = 1;
-                upLimit = (fieldSize*fieldSize)/2;
+                upLimit = collapseCount-1;
                 textCounter.setText(String.valueOf(changeRange(seekBar.getProgress(),0,100,downLimit,upLimit)));
                 break;
             case 2:
