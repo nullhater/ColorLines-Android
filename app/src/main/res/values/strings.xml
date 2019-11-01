@@ -23,4 +23,6 @@
     <string name="textGaveOver">Game over</string>
     <string name="textPoints">You collect points:</string>
     <string name="textVersion">Version</string>
+    <string name="sww">Something went wrong. Please restart the application.</string>
+    <string name="personalAddDisabled">Personalized ads disabled</string>
 </resources>

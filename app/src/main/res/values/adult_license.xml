@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialogTitle">Personalized ad serving to minors in the European Union</string>
+    <string name="dialogMessage">In the countries of the European Union it is forbidden to show personalized advertising to persons under the age of 18. Are you 18 years old at the moment?</string>
+    <string name="dialogIsAdult">Yes, i am 18 years old or older</string>
+    <string name="dialogNoAdult">No, I\'m under 18</string>
+</resources>

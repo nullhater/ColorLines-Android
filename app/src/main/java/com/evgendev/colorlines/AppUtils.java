@@ -3,6 +3,9 @@ package com.evgendev.colorlines;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.android.gms.ads.AdRequest;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,9 +15,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class AppUtils {
-    public static final String APP_PREFERENCES = "mysettings";
-    public static final String APP_PREFERENCES_SAVEGAME = "savegame";
+    public static final String APP_PREFERENCES = "appSettings";
+    public static final String USER_ADULT = "appFirstStart";
+    public static final String CLICK_COUNT = "clickCount";
+    public static final String AD_NEXT_DATE = "AdNextDate";
     public static final String FILESAVE = "fsave"; //Путь до файла с сохранением игры
+    public static boolean appPersonilize = false;
+    public static  boolean appAlreadyInit = false;
+    public static AdRequest request;
+
 
 
     public static void objToFile(String filepath, Object object, Context context){ //Сохранение объект в файл

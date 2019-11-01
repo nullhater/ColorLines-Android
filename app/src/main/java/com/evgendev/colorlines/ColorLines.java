@@ -12,6 +12,7 @@ public class ColorLines implements Serializable {
     private int [][]field; //Игровое поле (0 - пусто, >0 - цвет шара)
     private int []nextColors; //Цвет шаров, которые появятся при следующем ходе
     private int []selectedBall = {-1,-1}; //Выбранные шар
+    private ArrayList<Pair<Integer,Integer>> deleteBalls;
     private int score = 0; //Набранные очки
     private int colorsCount = 7; //Кол-во всех цветов
     private int nextBallsCount = 3; //Кол-во генерируемых шаров за раз
@@ -138,7 +139,7 @@ public class ColorLines implements Serializable {
     }
 
     public int checkLines(){ //Проверка собранных линий и их удаление с начислением очков
-        int score=0;
+        deleteBalls = new ArrayList<>();
         ArrayList<Pair<Integer,Integer>> sequence = new ArrayList<>();
         for (int i = 0; i < fieldSize; i++) {
             int lastVal = 0;
@@ -153,7 +154,7 @@ public class ColorLines implements Serializable {
                         if (sequence.size()==0){
                             if (field[i][j]!=0) sequence.add(new Pair<Integer, Integer>(i,j));
                         }else {
-                            score += deleteBalls(sequence);
+                            deleteBalls(sequence);
                             sequence.clear();
                             if (field[i][j]!=0) sequence.add(new Pair<Integer, Integer>(i,j));
                         }
@@ -162,7 +163,7 @@ public class ColorLines implements Serializable {
                     lastVal=field[i][j];
                 }
             }
-            score+= deleteBalls(sequence);
+            deleteBalls(sequence);
             sequence.clear();
         }
 
@@ -179,7 +180,7 @@ public class ColorLines implements Serializable {
                         if (sequence.size()==0){
                             if (field[j][i]!=0) sequence.add(new Pair<Integer, Integer>(j,i));
                         }else {
-                            score += deleteBalls(sequence);
+                            deleteBalls(sequence);
                             sequence.clear();
                             if (field[j][i]!=0) sequence.add(new Pair<Integer, Integer>(j,i));
                         }
@@ -188,7 +189,7 @@ public class ColorLines implements Serializable {
                     lastVal=field[j][i];
                 }
             }
-            score+= deleteBalls(sequence);
+            deleteBalls(sequence);
             sequence.clear();
         }
 
@@ -209,7 +210,7 @@ public class ColorLines implements Serializable {
                                 if (field[i+k][j+k]!=0)
                                     sequence.add(new Pair<Integer, Integer>(i+k,j+k));
                             }else {
-                                score += deleteBalls(sequence);
+                                deleteBalls(sequence);
                                 sequence.clear();
                                 if (field[i+k][j+k]!=0)
                                     sequence.add(new Pair<Integer, Integer>(i+k,j+k));
@@ -220,7 +221,7 @@ public class ColorLines implements Serializable {
                     }
                 }
             }
-            score+= deleteBalls(sequence);
+            deleteBalls(sequence);
             sequence.clear();
         }
 
@@ -242,7 +243,7 @@ public class ColorLines implements Serializable {
                                 if (field[i+k][j-k]!=0)
                                     sequence.add(new Pair<Integer, Integer>(i+k,j-k));
                             }else {
-                                score += deleteBalls(sequence);
+                                deleteBalls(sequence);
                                 sequence.clear();
                                 if (field[i+k][j-k]!=0)
                                     sequence.add(new Pair<Integer, Integer>(i+k,j-k));
@@ -253,10 +254,10 @@ public class ColorLines implements Serializable {
                     }
                 }
             }
-            score+= deleteBalls(sequence);
+            deleteBalls(sequence);
             sequence.clear();
         }
-        return score;
+        return removeBallsGetScore();
     }
 
     private void checkGaveOver(){
@@ -268,19 +269,31 @@ public class ColorLines implements Serializable {
         gameOver = true;
     }
 
-    private int deleteBalls(ArrayList<Pair<Integer,Integer>> position){
+    private void deleteBalls(ArrayList<Pair<Integer,Integer>> position){//TODO Удалять несколько линий, если такие есть!
         if (position.size()>=collapseCount){
             for (int i = 0; i < position.size() - 1; i++) {
                 for (int j = i+1; j < position.size(); j++) {
-                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second]) return 0; //Если в линии разные шары, то не удалять
+                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second]) return ; //Если в линии разные шары, то не удалять
                 }
             }
             for (int i = 0; i < position.size(); i++) {
-                field[position.get(i).first][position.get(i).second] = 0;
+                //field[position.get(i).first][position.get(i).second] = 0;
+                Pair<Integer, Integer> pair = new Pair<Integer, Integer>(position.get(i).first,position.get(i).second);
+                if (!deleteBalls.contains(pair)){
+                    deleteBalls.add(pair);
+                }
             }
-            return position.size()*2;
+            //return position.size()*2;
         }
-        return 0;
+        //return 0;
+    }
+
+    private int removeBallsGetScore(){
+        int score = deleteBalls.size();
+        for (int i = 0; i < deleteBalls.size(); i++) {
+            field[deleteBalls.get(i).first][deleteBalls.get(i).second] = 0;
+        }
+        return score*2;
     }
 
 

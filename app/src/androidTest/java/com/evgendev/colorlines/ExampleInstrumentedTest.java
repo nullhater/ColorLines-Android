@@ -484,4 +484,31 @@ public class ExampleInstrumentedTest {
         assertEquals(10,colorLines.checkLines());
     }
 
+    @Test
+    public void deleteQuad(){
+        ColorLines colorLines = new ColorLines(9);
+        for (int i = 0; i < colorLines.getFieldSize(); i++) {
+            for (int j = 0; j < colorLines.getFieldSize(); j++) {
+                colorLines.getField()[i][j] = 0;
+            }
+        }
+        colorLines.getField()[0][0]=1;
+        colorLines.getField()[0][1]=1;
+        colorLines.getField()[0][2]=1;
+        colorLines.getField()[0][3]=1;
+        colorLines.getField()[0][4]=1;
+        colorLines.getField()[1][4]=1;
+        colorLines.getField()[2][4]=1;
+        colorLines.getField()[3][4]=1;
+        colorLines.getField()[4][4]=1;
+        colorLines.getField()[4][3]=1;
+        colorLines.getField()[4][2]=1;
+        colorLines.getField()[4][1]=1;
+        colorLines.getField()[4][0]=1;
+        colorLines.getField()[3][0]=1;
+        colorLines.getField()[2][0]=1;
+        colorLines.getField()[1][0]=1;
+        assertEquals(16*2,colorLines.checkLines());
+    }
+
 }
