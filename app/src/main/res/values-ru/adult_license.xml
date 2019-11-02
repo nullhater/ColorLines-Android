@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dialogTitle">Показ персонализированной рекламы несовершеннолетним лицам стран ЕС</string>
-    <string name="dialogMessage">В странах Европейского союза запрещается показывать персонализированную рекламу лицам, не достигшим 18 лет. Есть ли вам на данный момент 18 лет?</string>
-    <string name="dialogIsAdult">Да, мне 18 лет или старше</string>
-    <string name="dialogNoAdult">Нет, я моложе 18 лет</string>
+    <string name="dialogMessage">В странах Европейского союза запрещается показывать персонализированную рекламу лицам, не достигшим 16 лет. Есть ли вам на данный момент 16 лет?</string>
+    <string name="dialogIsAdult">Да, мне 16 лет или старше</string>
+    <string name="dialogNoAdult">Нет, я моложе 16 лет</string>
 </resources>

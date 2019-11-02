@@ -3,10 +3,7 @@ package com.evgendev.colorlines;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.google.android.gms.ads.AdRequest;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

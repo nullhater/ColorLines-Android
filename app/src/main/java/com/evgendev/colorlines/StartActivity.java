@@ -35,13 +35,6 @@ public class StartActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);
         mSettings = getSharedPreferences(AppUtils.APP_PREFERENCES, Context.MODE_PRIVATE);
-//        if (mSettings.contains(AppUtils.USER_ADULT)) {
-//            if (mSettings.getBoolean(AppUtils.USER_ADULT, false)) {
-//                AppUtils.appPersonilize = false;
-//                startActivity(new Intent(StartActivity.this, MainActivity.class));
-//                return;
-//            }
-//        }
         StartAddWaiter waiter = new StartAddWaiter();
         addInit();
         waiter.execute();
@@ -83,9 +76,9 @@ public class StartActivity extends AppCompatActivity {
     private void addInit(){
         String[] publisherIds = {getString(R.string.publishId)};
         ConsentInformation consentInformation = ConsentInformation.getInstance(getApplicationContext());
-        consentInformation.addTestDevice("EA105D23EC536425B8F30684DD8AE52F");//TODO УДАЛИТЬ ЭТУ СТРОЧКУ
-        consentInformation.addTestDevice("F492843A2D4A38671941ECC971232B35");//TODO УДАЛИТЬ ЭТУ СТРОЧКУ (SONY)
-        consentInformation.setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA); //TODO УДАЛИТЬ ЭТУ СТРОЧКУ
+//        consentInformation.addTestDevice("EA105D23EC536425B8F30684DD8AE52F");
+//        consentInformation.addTestDevice("F492843A2D4A38671941ECC971232B35");
+        //consentInformation.setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA);
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
             @Override
             public void onConsentInfoUpdated(ConsentStatus consentStatus) {

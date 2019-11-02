@@ -2,7 +2,6 @@ package com.evgendev.colorlines;
 
 
 import android.util.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -269,7 +268,7 @@ public class ColorLines implements Serializable {
         gameOver = true;
     }
 
-    private void deleteBalls(ArrayList<Pair<Integer,Integer>> position){//TODO Удалять несколько линий, если такие есть!
+    private void deleteBalls(ArrayList<Pair<Integer,Integer>> position){
         if (position.size()>=collapseCount){
             for (int i = 0; i < position.size() - 1; i++) {
                 for (int j = i+1; j < position.size(); j++) {

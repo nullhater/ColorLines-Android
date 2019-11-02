@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.google.ads.consent.ConsentForm;
 
 
 
@@ -22,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        Toast.makeText(this, String.valueOf(AppUtils.appPersonilize), Toast.LENGTH_SHORT).show();
         continueButton = findViewById(R.id.buttonContinueG);
         textVersion = findViewById(R.id.textViewVersion);
         textVersion.setText(getResources().getString(R.string.textVersion)+" "+BuildConfig.VERSION_NAME);
