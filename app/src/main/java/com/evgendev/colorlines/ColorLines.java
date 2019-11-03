@@ -196,10 +196,12 @@ public class ColorLines implements Serializable {
             for (int j = 0; j < fieldSize - collapseCount+1; j++) {
                 int lastVal = 0;
                 for (int k = 0; k < fieldSize; k++) {
+                    int x = i+k; int y = j+k;
                     if (i+k>=fieldSize || j+k>=fieldSize) break;
                     if (k==0){
                         lastVal = field[i+k][j+k];
-                        if (field[i+k][j+k]!=0) sequence.add(new Pair<Integer, Integer>(i+k,j+k));
+                        if (field[i+k][j+k]!=0)
+                            sequence.add(new Pair<Integer, Integer>(i+k,j+k));
                     }else {
                         if (lastVal==field[i+k][j+k]){
                             if (field[i+k][j+k]!=0)
@@ -219,6 +221,8 @@ public class ColorLines implements Serializable {
                         lastVal=field[i+k][j+k];
                     }
                 }
+                deleteBalls(sequence);
+                sequence.clear();
             }
             deleteBalls(sequence);
             sequence.clear();
@@ -252,6 +256,8 @@ public class ColorLines implements Serializable {
                         lastVal=field[i+k][j-k];
                     }
                 }
+                deleteBalls(sequence);
+                sequence.clear();
             }
             deleteBalls(sequence);
             sequence.clear();
@@ -272,7 +278,8 @@ public class ColorLines implements Serializable {
         if (position.size()>=collapseCount){
             for (int i = 0; i < position.size() - 1; i++) {
                 for (int j = i+1; j < position.size(); j++) {
-                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second]) return ; //Если в линии разные шары, то не удалять
+                    if (field[position.get(i).first][position.get(i).second]!=field[position.get(j).first][position.get(j).second])
+                        return ; //Если в линии разные шары, то не удалять
                 }
             }
             for (int i = 0; i < position.size(); i++) {
