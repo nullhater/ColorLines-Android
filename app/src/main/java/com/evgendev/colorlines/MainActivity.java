@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         textVersion.setText(getResources().getString(R.string.textVersion)+" "+BuildConfig.VERSION_NAME);
         textPrivacyPolicy = findViewById(R.id.textViewPrivacyPolicy);
         textPrivacyPolicy.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://raw.githubusercontent.com/Evgeny268/ColorLines-Android/master/app/src/main/res/privacypolicy/privacy_policy.txt"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://raw.githubusercontent.com/Evgeny268/ColorLines-Android/master/privacy_policy.txt"));
             startActivity(browserIntent);
         });
         checkSaves();
