@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Vibrator;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -15,18 +13,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class GameActivity extends AppCompatActivity implements View.OnTouchListener{
@@ -37,7 +26,6 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
     private TextView textViewScore;
     private ColorLines colorLines;
     private ColorLines cLinesRestore;
-    private AdView adView;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -47,65 +35,6 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         sharedPreferences = getSharedPreferences(AppUtils.APP_PREFERENCES, Context.MODE_PRIVATE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         cLinesSurfaceView = findViewById(R.id.gameView);
-        adView = findViewById(R.id.adViewBanner);
-        if (AppUtils.appAlreadyInit){
-            showAd();
-        }else {
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                    if (AppUtils.appPersonilize == false) {
-                        Bundle extras = new Bundle();
-                        extras.putString("npa", "1");
-                        AppUtils.request = new AdRequest.Builder()
-                                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-//                                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-//                                .addTestDevice("EA105D23EC536425B8F30684DD8AE52F")
-//                                .addTestDevice("F492843A2D4A38671941ECC971232B35")
-                                .build();
-                    } else {
-                        AppUtils.request = new AdRequest.Builder()
-//                                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-//                                .addTestDevice("EA105D23EC536425B8F30684DD8AE52F")
-//                                .addTestDevice("F492843A2D4A38671941ECC971232B35")
-                                .build();
-                    }
-                    AppUtils.appAlreadyInit = true;
-                    showAd();
-                }
-            });
-        }
-
-        adView.setAdListener(new AdListener(){
-
-            @Override
-            public void onAdOpened() {
-                int clickCount;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if(sharedPreferences.contains(AppUtils.CLICK_COUNT)){
-                    clickCount = sharedPreferences.getInt(AppUtils.CLICK_COUNT,0);
-                }else {
-                    clickCount = 0;
-                }
-                clickCount++;
-                if (clickCount>=2){
-                    Date currentDate = new Date();
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(currentDate);
-                    c.add(Calendar.DATE, 1);
-                    currentDate = c.getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    editor.putString(AppUtils.AD_NEXT_DATE,dateFormat.format(currentDate));
-                    editor.putInt(AppUtils.CLICK_COUNT,0);
-                    editor.apply();
-                    adView.setEnabled(false);
-                    adView.setVisibility(View.GONE);
-                }else {
-                    editor.putInt(AppUtils.CLICK_COUNT,clickCount);
-                    editor.apply();
-                }
-            }
-        });
         nextBallsSurfaceView = findViewById(R.id.nextBallsSurfaceView);
         nextBallsSurfaceView.setBackColor(getResources().getColor(R.color.backColor));
         textViewScore = findViewById(R.id.textViewScore);
@@ -131,30 +60,6 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
             }
         }.start();
     }
-
-    public void showAd(){
-        if (sharedPreferences.contains(AppUtils.AD_NEXT_DATE)){
-            String strDate = sharedPreferences.getString(AppUtils.AD_NEXT_DATE,"");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date currentDate = new Date();
-            Date date;
-            try {
-                date = dateFormat.parse(strDate);
-            } catch (ParseException e) {
-                adView.loadAd(AppUtils.request);
-                return;
-            }
-            if (date.compareTo(currentDate)==1){
-                adView.setEnabled(false);
-                adView.setVisibility(View.GONE);
-            }else {
-                adView.loadAd(AppUtils.request);
-            }
-        }else {
-            adView.loadAd(AppUtils.request);
-        }
-    }
-
 
     @Override
     public boolean onTouch(View v, MotionEvent event) { //Касание к полю

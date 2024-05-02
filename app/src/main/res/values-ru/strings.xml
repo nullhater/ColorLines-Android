@@ -25,4 +25,5 @@
     <string name="textVersion">Версия</string>
     <string name="sww">Что-то пошло не так. Пожалуйста, перезапустите приложение</string>
     <string name="personalAddDisabled">Персональная реклама отключена</string>
+    <string name="privacyPolicy">Политика конфиденциальности</string>
 </resources>

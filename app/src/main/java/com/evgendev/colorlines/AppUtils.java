@@ -1,9 +1,8 @@
 package com.evgendev.colorlines;
 
 
-
 import android.content.Context;
-import com.google.android.gms.ads.AdRequest;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,7 +18,6 @@ public class AppUtils {
     public static final String FILESAVE = "fsave"; //Путь до файла с сохранением игры
     public static boolean appPersonilize = false;
     public static  boolean appAlreadyInit = false;
-    public static AdRequest request;
 
 
 

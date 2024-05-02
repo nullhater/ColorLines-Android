@@ -2,12 +2,14 @@ package com.evgendev.colorlines;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 
@@ -15,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button continueButton;
     private TextView textVersion;
+
+    private TextView textPrivacyPolicy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
         continueButton = findViewById(R.id.buttonContinueG);
         textVersion = findViewById(R.id.textViewVersion);
         textVersion.setText(getResources().getString(R.string.textVersion)+" "+BuildConfig.VERSION_NAME);
+        textPrivacyPolicy = findViewById(R.id.textViewPrivacyPolicy);
+        textPrivacyPolicy.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://raw.githubusercontent.com/Evgeny268/ColorLines-Android/master/app/src/main/res/privacypolicy/privacy_policy.txt"));
+            startActivity(browserIntent);
+        });
         checkSaves();
     }
 

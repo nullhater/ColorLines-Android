@@ -2,6 +2,7 @@ package com.evgendev.colorlines;
 
 
 import android.util.Pair;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
